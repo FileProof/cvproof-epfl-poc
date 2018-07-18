@@ -1,0 +1,27 @@
+div(class='ui vertical segment' id='pop-up-help-validator-no-block')
+    div(class='ui attached message')
+        div(class='header') Documents that requires your validation
+        div(id='msg-no-block-to-validate')
+            p No documents are currently waiting for your approval
+
+    div(class='ui attached fluid segment')
+        div(class='ui disabled segment')
+            p No block is currently waiting for your approval
+            img(class="ui wireframe image" src='images/paragraph.png')
+
+    div(class="ui bottom attached info ignored message")
+        div(class='content')
+        //History of validation
+        div(class='header') <i class='info letter icon'></i> Your validation history
+        ul(class='list')
+            li You have 
+                if currentBlock && currentBlock.validated
+                    | validated one submission.
+                else
+                    | not accepted any submission yet.
+            li You have 
+                if (currentBlock && !currentBlock.validated && currentBlock.processed)
+                    | rejected one submission.
+                else
+                    | not rejected any submission yet.
+        

@@ -1,0 +1,18 @@
+extends layout
+
+block content
+  h2(class='dividing header') Validator View
+
+  if currentBlock && currentBlock.processed
+    div(class="ui message notification" onclick="window.location.href='/admin'")
+        div(class="header") Go to next role
+        p You have completed the validator duty, take a look at your validation history and click here to try the admin role
+
+  p This view allows you to review the block that was submitted by the Holder and to accept/reject its validation or even to edit its content.
+
+  div(id='main-block-content')
+    if currentBlock && !currentBlock.processed
+      include validator-block-waiting.pug
+    else
+      include validator-no-block-waiting.pug
+

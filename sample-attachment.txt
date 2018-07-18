@@ -1,0 +1,1 @@
+This is a sample attachment for CV Proof demo. It is suppose to prove the authenticity of the document the holder tries to authenticate during the demo.

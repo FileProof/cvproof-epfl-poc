@@ -1,0 +1,27 @@
+doctype html
+html
+  head
+    title= title
+
+    // Import css
+    link(rel='stylesheet', href='/semantic/semantic.min.css')
+    link(rel='stylesheet', href='/css/style.css')
+
+    // Import js
+    script(src='https://code.jquery.com/jquery-3.2.1.min.js')
+    script(src='/semantic/semantic.min.js')
+
+  body(id='lock-page-main')
+
+    main(class='ui middle center aligned padded grid')
+        div(class='fourteen wide column')
+
+            div(class='ui basic segment')
+                h2(class='ui white center aligned icon header')
+                    i(class='lock icon')
+                    div(class='content')
+                        div(class='sub header' id="lock-text") Enter password to unlock CV-Proof demo
+
+            form(class='ui huge form' action='/' method='post')
+                div(class='field')
+                    input(type='password' name='password' placeholder='Password')

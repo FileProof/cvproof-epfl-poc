@@ -1,0 +1,78 @@
+p This view allows you to submit a new Document that you want to authenticate using the plateform
+
+div(id="form-segment")    
+  // the form to submit new blocks
+  div(class='ui inverted segment' id='pop-up-help-form')
+    form(id="block-form" class='ui inverted equal width form' action="/submit-block" method="post" enctype="multipart/form-data")
+      div(id="errors")
+      div(class="required field" id="type")
+          label Document Type
+          select(class="ui fluid dropdown" name="type")
+            option(value="") Type
+            option(value="Diploma") Diploma
+            option(value="Certification") Certification
+            option(value="Reference") Reference
+            option(value="ID") ID
+      
+      //Starting dates of the doc
+      div(class='required fields')
+
+        div(class="field" id="start_month")
+          label Starting Month
+          select(class="ui fluid search dropdown" name="start_month")
+            option(value="") Month
+            option(value="01") January
+            option(value="02") February
+            option(value="03") March
+            option(value="04") April
+            option(value="05") May
+            option(value="06") June
+            option(value="07") July
+            option(value="08") August
+            option(value="09") September
+            option(value="10") October
+            option(value="11") November
+            option(value="12") December
+        div(class="field" id="start_year")
+          label Starting Year
+          input(type="text" name="start_year" maxlength="4" placeholder="Year")
+
+      //Ending dates of the doc
+      div(class='fields')
+        div(class="required field" id="end_month")
+          label Ending Month
+          select(class="ui fluid search dropdown" name="end_month")
+            option(value="") Month
+            option(value="01") January
+            option(value="02") February
+            option(value="03") March
+            option(value="04") April
+            option(value="05") May
+            option(value="06") June
+            option(value="07") July
+            option(value="08") August
+            option(value="09") September
+            option(value="10") October
+            option(value="11") November
+            option(value="12") December
+        div(class="required field" id="end_year")
+          label Ending Year
+          input(type="text" name="end_year" maxlength="4" placeholder="Year")
+
+      div(class="field" id="body")
+        label Description of the document
+        textarea(rows="2" name="body")
+
+      div(class='fields')
+        div(class='field' id="files")
+          label Attachment to join
+          input(type="file" name="files" id="file-input")
+        
+        div(class="required field" id="validator")
+          label Validator
+          select(class="ui fluid dropdown" name="validator")
+            option(value="") Saved Validators
+            option(value="EPFL") EPFL
+
+      div(class='ui container')
+        button(class="ui fluid teal button" type="submit") Submit

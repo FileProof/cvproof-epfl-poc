@@ -1,0 +1,73 @@
+doctype html
+html
+  head
+    title= title
+
+    // Import css
+    link(rel='stylesheet', href='/semantic/semantic.min.css')
+    link(rel='stylesheet', href='/css/style.css')
+
+    // Import js
+    script(src='https://code.jquery.com/jquery-3.2.1.min.js')
+    script(src='/semantic/semantic.min.js')
+    script(src='/js/form.js')
+    script(src='/js/holder.js')
+    script(src='/js/validator.js')
+    script(src='/js/admin.js')
+
+  body
+    // Menu
+    div(class='wrapper')
+      div(class='ui top fixed inverted menu')
+        div(class='header item') Select Demo Role
+        a(class='item' href='/holder') Holder
+        a(class='item' href='/validator') Validator
+        a(class='item' href='/admin') Admin Tester
+        a(class='right item' href='https://cvproof.com') Back to CVproof.com Home
+
+      // Main Container
+      
+      main(class='ui middle center aligned padded relaxed grid')
+        
+        div(class='row')
+          div(class='step-wrapper')
+            div(class="ui three steps")
+              div(class=(!currentBlock ? 'active step' : 'completed step') id='first-step')
+                i(class='id card outline icon')
+                div(class='content')
+                  div(class='title') Submission
+                  div(class='description') Submit a document to authenticate as a holder.
+              if !currentBlock
+                div(class='step' id='second-step')
+                  i(class='legal icon')
+                  div(class='content')
+                    div(class='title') Validation
+                    div(class='description') Change view to Validator to review the submission.
+              else
+                div(class=(!currentBlock.processed ? 'active step': 'completed step'))
+                  i(class='legal icon')
+                  div(class='content')
+                    div(class='title') Validation
+                    div(class='description') Change view to Validator to review the submission.
+
+              div(class=((currentBlock && currentBlock.validated) ? 'active step': 'disabled step'))
+                    i(class='lightning icon')
+                    div(class='content')
+                      div(class='title') Experience
+                      div(class='description') 
+                        if (currentBlock && currentBlock.validated) 
+                          | Try to change block content to see changes on digital signature.
+                        else  
+                          | (Can only be done if block is validated)
+        div(class='row')
+          div(class='fourteen wide column')
+            block content
+      div(class='push')
+
+    // Footer
+    div(class='ui inverted fluid vertical footer segment')
+      div(class='ui center aligned container')
+        div(class='ui horizontal inverted small link list')
+          a(class='item middle aligned' href='http://je.epfl.ch') Powered By
+          a(class='item middle aligned' href='http://je.epfl.ch')
+            img(src="/images/jewhite.png" width="50px")

@@ -1,0 +1,10 @@
+extends layout
+
+block content
+  h2(class='dividing header') Admin Tester View
+  p This view allows you to check how a block modification will modify the signature of the block
+
+  if currentBlock && currentBlock.validated
+    include admin-block-waiting.pug
+  else
+    include admin-no-block-waiting.pug

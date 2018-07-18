@@ -1,0 +1,169 @@
+// The list of blocks to validate 
+div(class='vertical segment' id='pop-up-block')
+    div(class='ui attached message')
+        div(class='header') Validated documents
+        div(id='msg-block-to-validate')
+            p 1 document has been validated
+        
+    // When a block has been reviewed
+    div(class='ui attached fluid segment')
+        div(class='ui attached segments')
+            div(class='ui segments')
+                div(class='ui horizontal segments')
+                    div(class='ui segment') 
+                        i(class='icon wait')
+                        em Submitted on
+                        p #{currentBlock.submissionTime}
+                    div(class='ui segment')
+                        i(class='icon bookmark')
+                        em Type
+                        p #{currentBlock.type}
+                    div(class='ui segment') 
+                        i(class='icon user') 
+                        em Holder
+                        p #{currentBlock.holderId}
+
+                div(class='ui horizontal segments')
+                    div(class='ui segment')
+                        i(class='icon comment outline')
+                        em Description
+                        if currentBlock.body.length == 0
+                            p [No description was provided]
+                        else
+                            p #{currentBlock.body}
+                    
+                    div(class='ui segment')
+                        a(class="ui button" id="download-link" href=currentBlock.attachmentPath style=currentBlock.attachmentPath ? "" : "pointer-events: none;" download)
+                            i(class='icon cloud download')
+                            if currentBlock.attachmentPath
+                                p Download attachment
+                            else
+                                p No attachment
+                    
+            div(class='ui bottom attached info success message')
+                div(class='ui segments')
+                    div(class='ui horizontal segments')  
+                        div(class='ui segment') 
+                            i(class='icon checked calendar')
+                            em Validation Time
+                            p #{currentBlock.validationTime}
+
+                        div(class='ui segment')
+                            i(class='icon unhide') 
+                            em Validator
+                            p #{currentBlock.validatorId}
+
+                    div(class='ui horizontal segments') 
+                        div(class='ui segment') 
+                            i(class='icon protect')
+                            em Digital Signature
+                            p #{currentBlock.hash}
+
+                div(class='ui blue button' id='hash-edit' data-inverted="" data-tooltip="To see how this affects the digital signature" data-position="top center") Edit Document
+
+            
+        
+// To edit the document and see the effect on the digital signature
+div(class='ui modal' id='edit-hash-modal')
+    div(class='ui header') Try to edit
+    div(class='content')
+        div(class='ui vertical segment' id="form-segment")
+            // the form to submit new blocks
+            div(class='ui inverted segment')
+
+                form(id="adm-edit-form" class='ui inverted equal width form' action="/get-new-hash" method="post" enctype="multipart/form-data")
+                    div(class="field")
+                        label Document Type
+                        select(class="ui fluid dropdown" name="type")
+                            option(value="") Type
+                            option(value="Diploma" selected=(currentBlock.type=="Diploma")) Diploma
+                            option(value="Certification" selected=(currentBlock.type=="Certification")) Certification
+                            option(value="Reference" selected=(currentBlock.type=="Reference")) Reference
+                            option(value="ID" selected=(currentBlock.type=="ID")) ID
+                    
+                    //Starting dates of the doc
+                    div(class='fields')
+                        div(class="field")
+                            label Starting Month
+                            select(class="ui fluid search dropdown" name="start_month")
+                                option(value="") Month
+                                option(value="01" selected=(currentBlock.timeframeStart.substring(0,2)=="01")) January
+                                option(value="02" selected=(currentBlock.timeframeStart.substring(0,2)=="02")) February
+                                option(value="03" selected=(currentBlock.timeframeStart.substring(0,2)=="03")) March
+                                option(value="04" selected=(currentBlock.timeframeStart.substring(0,2)=="04")) April
+                                option(value="05" selected=(currentBlock.timeframeStart.substring(0,2)=="05")) May
+                                option(value="06" selected=(currentBlock.timeframeStart.substring(0,2)=="06")) June
+                                option(value="07" selected=(currentBlock.timeframeStart.substring(0,2)=="07")) July
+                                option(value="08" selected=(currentBlock.timeframeStart.substring(0,2)=="08")) August
+                                option(value="09" selected=(currentBlock.timeframeStart.substring(0,2)=="09")) September
+                                option(value="10" selected=(currentBlock.timeframeStart.substring(0,2)=="10")) October
+                                option(value="11" selected=(currentBlock.timeframeStart.substring(0,2)=="11")) November
+                                option(value="12" selected=(currentBlock.timeframeStart.substring(0,2)=="12")) December
+                        div(class="field")
+                            label Starting Year
+                            input(type="text" name="start_year" maxlength="4" value=currentBlock.timeframeStart.substring(3,7))
+
+                    //Ending dates of the doc
+                    div(class='fields')
+                        div(class="field")
+                            label Ending Month
+                            select(class="ui fluid search dropdown" name="end_month")
+                                option(value="") Month
+                                option(value="01" selected=(currentBlock.timeframeEnd.substring(0,2)=="01")) January
+                                option(value="02" selected=(currentBlock.timeframeEnd.substring(0,2)=="02")) February
+                                option(value="03" selected=(currentBlock.timeframeEnd.substring(0,2)=="03")) March
+                                option(value="04" selected=(currentBlock.timeframeEnd.substring(0,2)=="04")) April
+                                option(value="05" selected=(currentBlock.timeframeEnd.substring(0,2)=="05")) May
+                                option(value="06" selected=(currentBlock.timeframeEnd.substring(0,2)=="06")) June
+                                option(value="07" selected=(currentBlock.timeframeEnd.substring(0,2)=="07")) July
+                                option(value="08" selected=(currentBlock.timeframeEnd.substring(0,2)=="08")) August
+                                option(value="09" selected=(currentBlock.timeframeEnd.substring(0,2)=="09")) September
+                                option(value="10" selected=(currentBlock.timeframeEnd.substring(0,2)=="10")) October
+                                option(value="11" selected=(currentBlock.timeframeEnd.substring(0,2)=="11")) November
+                                option(value="12" selected=(currentBlock.timeframeEnd.substring(0,2)=="12")) December
+                        div(class="field")
+                            label Ending Year
+                            input(type="text" name="end_year" maxlength="4" value=currentBlock.timeframeEnd.substring(3,7))
+
+                    div(class='fields')
+                        div(class="field")
+                            label Description of the document
+                            textarea(rows="2" name="body" placeholder='Description') #{currentBlock.body}
+
+                        div(class='field' id='new-file-input-div')
+                            label Join a new attachment
+                            input(type="file" name="files" id="new-file-input")
+
+                    div(class='actions')
+                        button(class="ui button" id='cancel-edit') Cancel
+                        button(class="ui teal button" id='submit-edit' type="submit") Check doc fingerprint
+
+// The modal to display the new digital signature of the block
+div(class="ui basic modal" id='hash-modal')
+    div(class="ui icon header")
+        i(class="random icon")
+        p Any modification of the document, translates in the digital signatures
+
+    div(class='content aligned center' style='text-align:center')
+        div(class="ui labeled button" tabindex="0" style='margin:auto')
+            div(class="ui red button")
+                p #{currentBlock.hash}
+            div(class="ui basic red left pointing label") 
+                i(class="protect icon") 
+                p Old
+
+        div(class="ui horizontal divider inverted" style='margin:20px auto 20px auto') 
+            span(id="comment")
+
+        div(class="ui flexible labeled button" tabindex="0")
+            div(class="ui blue button")
+                p(id="new-hash")
+
+            div(class="ui basic blue left pointing label") 
+                i(class="protect icon") 
+                p New
+
+    div(class='actions')
+        a(class='ui green ok inverted button' id='got-it-button')
+            i(class="checkmark icon")
+            p Got it!

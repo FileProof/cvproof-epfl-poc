@@ -1,0 +1,182 @@
+// The list of blocks to validate 
+div(id='pop-up-help-validator-block')    
+    div(class='ui attached message')
+        div(class='header') Documents that requires your validation
+        p A document is waiting for your approval
+
+    // When a block is ready to be reviewed
+    div(class='ui attached fluid segment')
+        div(class='ui segments')
+            div(class='ui horizontal segments')
+                div(class='ui segment') 
+                    i(class='icon wait')
+                    em Submitted on
+                    p #{currentBlock.submissionTime}
+                div(class='ui segment')
+                    i(class='icon bookmark')
+                    em Type
+                    p #{currentBlock.type}
+                div(class='ui segment') 
+                    i(class='icon user') 
+                    em Holder
+                    p #{currentBlock.holderId}
+            div(class='ui segment')
+                button(class="ui labeled icon button" id='review-button')
+                    i(class="options icon")
+                    p Review Submission
+    div(class="ui bottom attached info ignored message")
+        div(class='content')
+            //History of validation
+            div(class='header') <i class='info letter icon'></i> Your validation history
+            ul(class='list')
+                li You have 
+                    if currentBlock.validated
+                        | validated one submission.
+                    else
+                        | not accepted any submission yet.
+                li You have 
+                    if (!currentBlock.validated && currentBlock.processed)
+                        | rejected one submission.
+                    else
+                        | not rejected any submission yet.
+
+// The modal used to first review the submitted block
+div(class='ui modal' id='review-modal')
+    div(class='ui header') Review the document
+    div(class='content')
+        div(class='ui center aligned grid')
+            div(class='column')
+
+                // Block information
+                div(class='ui vertical segment')
+                    // Information about when it was submitted
+                    div(class='ui attached message')
+                        div(class='header') Document 
+                        p Find below the submission details along with the complete block content.
+                        div(class='ui horizontal segments')
+                            div(class='ui segment') 
+                                i(class='icon wait')
+                                em Submitted on
+                                p #{currentBlock.submissionTime}
+                            div(class='ui segment') 
+                                i(class='icon user')
+                                em Holder
+                                p #{currentBlock.holderId}
+
+                    // Information about the block itself
+                    div(class='ui attached fluid segment' style="background-color:white")
+                        div(class='ui segments')
+                            div(class='ui horizontal segments')
+                                div(class='ui segment') 
+                                    i(class='icon calendar')
+                                    em Date 
+                                    p #{currentBlock.timeframeStart} - #{currentBlock.timeframeEnd}
+                                div(class='ui segment')
+                                    i(class='icon bookmark')
+                                    em Type
+                                    p #{currentBlock.type}
+                            div(class='ui segment')
+                                a(class="ui button" id="download-link" href=currentBlock.attachmentPath style=currentBlock.attachmentPath ? "" : "pointer-events: none;" download)
+                                    i(class='icon cloud download')
+                                    if currentBlock.attachmentPath
+                                        p Download attachment
+                                    else
+                                        p No attachment
+                            div(class='ui segment')
+                                i(class='icon comment outline')
+                                em Description of the document
+                                if currentBlock.body.length == 0
+                                    p [No description was provided]
+                                else
+                                    p #{currentBlock.body}
+                        
+    div(class='actions')
+        div(class='ui buttons')
+            a(class="ui red animated cancel button" href='/reject-block' type='deny' id="review-reject")
+                div(class='visible content') Reject
+                div(class='hidden content')
+                    i(class='remove icon')
+            
+            div(class='or')
+
+            div(class='ui blue animated button' id="review-edit") 
+                div(class='visible content') Edit
+                div(class='hidden content')
+                    i(class='edit icon')
+
+            div(class='or')
+
+            a(class='ui approve green animated button' href='/accept-block' id="review-accept") 
+                div(class='visible content') Accept
+                div(class='hidden content')
+                    i(class='checkmark icon')
+
+// The modal used to edit the block content
+div(class='ui modal' id='edit-modal')
+    div(class='ui header') Edit the document
+    div(class='content')
+        div(class='ui vertical segment' id="form-segment")
+            // the form to submit new blocks
+            div(class='ui inverted segment')
+
+                form(id="validator-edit-form" class='ui inverted equal width form' action="/edit-block" method="post" enctype="multipart/form-data")
+                    div(class="field")
+                        label Document Type
+                        select(class="ui fluid dropdown" id='type' name="type")
+                            option(value="") Type
+                            option(value="Diploma" selected=(currentBlock.type=="Diploma")) Diploma
+                            option(value="Certification" selected=(currentBlock.type=="Certification")) Certification
+                            option(value="Reference" selected=(currentBlock.type=="Reference")) Reference
+                            option(value="ID" selected=(currentBlock.type=="ID")) ID
+                    
+                    //Starting dates of the doc
+                    div(class='fields')
+                        div(class="field")
+                            label Starting Month
+                            select(class="ui fluid search dropdown" id="start_month" name="start_month")
+                                option(value="") Month
+                                option(value="01" selected=(currentBlock.timeframeStart.substring(0,2)=="01")) January
+                                option(value="02" selected=(currentBlock.timeframeStart.substring(0,2)=="02")) February
+                                option(value="03" selected=(currentBlock.timeframeStart.substring(0,2)=="03")) March
+                                option(value="04" selected=(currentBlock.timeframeStart.substring(0,2)=="04")) April
+                                option(value="05" selected=(currentBlock.timeframeStart.substring(0,2)=="05")) May
+                                option(value="06" selected=(currentBlock.timeframeStart.substring(0,2)=="06")) June
+                                option(value="07" selected=(currentBlock.timeframeStart.substring(0,2)=="07")) July
+                                option(value="08" selected=(currentBlock.timeframeStart.substring(0,2)=="08")) August
+                                option(value="09" selected=(currentBlock.timeframeStart.substring(0,2)=="09")) September
+                                option(value="10" selected=(currentBlock.timeframeStart.substring(0,2)=="10")) October
+                                option(value="11" selected=(currentBlock.timeframeStart.substring(0,2)=="11")) November
+                                option(value="12" selected=(currentBlock.timeframeStart.substring(0,2)=="12")) December
+                        div(class="field")
+                            label Starting Year
+                            input(type="text" name="start_year" maxlength="4" value=currentBlock.timeframeStart.substring(3,7))
+
+                    //Ending dates of the doc
+                    div(class='fields')
+                        div(class="field")
+                            label Ending Month
+                            select(class="ui fluid search dropdown" id="end_month" name="end_month")
+                                option(value="") Month
+                                option(value="01" selected=(currentBlock.timeframeEnd.substring(0,2)=="01")) January
+                                option(value="02" selected=(currentBlock.timeframeEnd.substring(0,2)=="02")) February
+                                option(value="03" selected=(currentBlock.timeframeEnd.substring(0,2)=="03")) March
+                                option(value="04" selected=(currentBlock.timeframeEnd.substring(0,2)=="04")) April
+                                option(value="05" selected=(currentBlock.timeframeEnd.substring(0,2)=="05")) May
+                                option(value="06" selected=(currentBlock.timeframeEnd.substring(0,2)=="06")) June
+                                option(value="07" selected=(currentBlock.timeframeEnd.substring(0,2)=="07")) July
+                                option(value="08" selected=(currentBlock.timeframeEnd.substring(0,2)=="08")) August
+                                option(value="09" selected=(currentBlock.timeframeEnd.substring(0,2)=="09")) September
+                                option(value="10" selected=(currentBlock.timeframeEnd.substring(0,2)=="10")) October
+                                option(value="11" selected=(currentBlock.timeframeEnd.substring(0,2)=="11")) November
+                                option(value="12" selected=(currentBlock.timeframeEnd.substring(0,2)=="12")) December
+                        div(class="field")
+                            label Ending Year
+                            input(type="text" name="end_year" maxlength="4" value=currentBlock.timeframeEnd.substring(3,7))
+
+                    div(class="field")
+                        label Description of the document
+                        textarea(rows="2" name="body" placeholder='Description') #{currentBlock.body}
+                    
+                    div(class='actions')
+                        button(class="ui button" id='cancel-edit') Cancel
+                        button(class="ui teal button" id='submit-edit' type="submit") Submit

@@ -1,0 +1,53 @@
+.segment{
+    overflow-wrap: break-word;
+}
+
+.column{
+    max-width: 650px;
+    margin:0 auto;
+}
+/* Sticky footer */
+html,body {
+  height: 100%;
+  margin: 0;
+}
+
+.wrapper {
+  min-height: 100%;
+  text-align: center;
+
+  /* Equal to height of footer */
+  /* But also accounting for potential margin-bottom of last child */
+  margin-bottom: -50px;
+  margin-top: 0px;
+}
+
+.footer,
+.push {
+  height: 50px;
+}
+
+.step-wrapper{
+  margin:0 10px 0 10px;
+}
+
+#errors {
+  margin-bottom: 10px;
+}
+
+#lock-page-main {
+  background: rgba(0, 0, 0, 0.9);
+  height: 100%
+}
+
+.header.white {
+  color: white;
+}
+
+#lock-text {
+  color: white;
+}
+
+.popup{
+  text-align: center;
+}

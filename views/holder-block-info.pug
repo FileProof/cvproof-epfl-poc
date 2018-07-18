@@ -1,0 +1,83 @@
+
+div(class="ui message notification" onclick="window.location.href='/validator'")
+  div(class="header") Go to next role
+  p You have completed the holder duty, take a look at your pending block and click here to try the validator role
+
+
+a(class="ui fluid large teal submit button" id="submit-block-btn" href="/cancel-block") Submit a new block
+
+// Information about the current block
+div(class='ui vertical segment' id='pop-up-help-info')        
+  div(class='ui attached message')
+    div(class='header') Your current document information
+    p You'll find here all the information of your submitted document
+  
+  div(class='ui attached fluid segment')
+    div(class='ui segments')
+      div(class='ui horizontal segments')
+
+        div(class='ui segment') 
+          i(class='icon calendar')
+          em Date
+          p #{currentBlock.timeframeStart} - #{currentBlock.timeframeEnd}
+
+        div(class='ui segment')
+          i(class='icon bookmark')
+          em Type
+          p #{currentBlock.type}
+
+        div(class='ui segment') 
+          i(class='icon unhide') 
+          em Validator
+          p #{currentBlock.validatorId}
+
+      div(class='ui segment')
+        i(class='icon comment outline')
+        em Description
+        if currentBlock.body.length == 0
+          p [No description was provided]
+        else
+          p #{currentBlock.body}
+
+      div(class='ui segment')
+        a(class="ui button" id="download-link" href=currentBlock.attachmentPath style=currentBlock.attachmentPath ? "" : "pointer-events: none;" download)
+          i(class='icon cloud download')
+          if currentBlock.attachmentPath
+            p Download your attachment
+          else
+            p No attachment
+
+  if !currentBlock.processed
+    // All possible messsages about the status (will have to be corresponding to the real status)
+    div(class="ui bottom attached warning message" id="block-processing-segment")
+      //Message if processing
+      div(class='header') Processing
+        i(class="notched circle loading icon")
+      p Your block is being processed by the validator
+      p (click <a href='/cancel-block'> here </a> to cancel your submission)
+
+  else if currentBlock.validated
+    div(class="ui bottom attached success message" id="block-validated-segment")
+      //Message if validated
+      div(class='header') Validated 
+        i(class="icon checkmark") 
+      p Your block was successfully validated
+      //This should be showed only once the block has been validated
+      div(class='ui segments')
+        div(class='ui segment') 
+          i(class='icon checked calendar')
+          em Validation Time
+          p #{currentBlock.validationTime}
+
+        div(class='ui segment') 
+          i(class='icon protect')
+          em Digital Signature
+          p #{currentBlock.hash}
+
+  else
+    div(class="ui bottom attached negative message" id="block-rejected-segment")
+      //Message if rejected
+      div(class='header') Rejected 
+        i(class="icon remove circle") 
+      p Your block has been rejected.
+      a(class="ui basic red button" href="/cancel-block") Try again

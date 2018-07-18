@@ -1,0 +1,10 @@
+extends layout
+
+block content
+  h2(class='dividing header') Holder View
+
+  div(id='main-block-content')
+    if currentBlock
+      include holder-block-info.pug
+    else
+      include holder-block-form.pug
