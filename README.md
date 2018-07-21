@@ -1,6 +1,16 @@
 # esther
 
-## Usage
+## Introduction
+[CVProof.com](http://cvproof.com) Proof-of-Concept developed in collaboration with EPFL Research Institute and university in Lausanne, Switzerland to demonstrate a basic credential validation.
+
+## Process
+a) Requestor uploads a document (can be an academic certificate) to validate.
+b) Validator (can be the University) checks the document and can modify the document.
+c) Validator confirms the validation.
+d) The document can be modified after validation.
+e) Check detects if in step d) above the document has been modified in comparing proof of validation c) above sealed in the blockchain.
+
+## Installation
 
 * Install dependencies: `npm install`
 * Run the server in _debug_ mode: `DEBUG=esther:* npm start`
